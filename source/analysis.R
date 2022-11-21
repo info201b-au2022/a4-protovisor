@@ -79,7 +79,6 @@ plot_jail_pop_by_states(c("WA", "MT", "WY", "MI", "VT"))
 ## Section 5  ---- 
 #----------------------------------------------------------------------------#
 # Comparing, by year, the black male versus white male population of prisons in the US
-# -- alongside the percent of the population they make up
 #----------------------------------------------------------------------------#
 
 get_bm_vs_wm_jail_pop <- function() {
