@@ -6,10 +6,12 @@ library(tidyverse)
 # Note: The CSV file is stored on my local machine to speed load times
 #---------------------------------------------------------------------------#
 get_data <- function(num_records=-1) {
-  fname <- "~/Documents/info201/data/incarceration_trends.csv"
+  fname <- "~/info201/data/incarceration_trends.csv"
   df <- read.csv(fname, nrows=num_records)
   return(df)
 }
+
+incarceration_df <- get_data(-1)
 
 # Processing places ----
 # NOTE: For these functions to work, the dataframe `incarceration_df` must 
@@ -18,6 +20,7 @@ get_data <- function(num_records=-1) {
 # Return the list of states in a region.  The regions are: 
 #    Midwest, Northeast, South, West
 #----------------------------------------------------------------------------#
+
 states_in_region <- function(p_region) {
   the_states <- incarceration_df %>%
     filter(region == p_region) %>%
@@ -26,10 +29,16 @@ states_in_region <- function(p_region) {
   return(the_states)
 }
 
+midwest_states <- states_in_region("Midwest")
+northeast_states <- states_in_region("Northeast")
+south_states <- states_in_region("South")
+west_states <- states_in_region("West")
+
 #----------------------------------------------------------------------------#
 # Return the list of divisions in a region. The regions are: 
 # Midwest, Northeast, South, West
 #----------------------------------------------------------------------------#
+
 divisions_in_region <- function(p_region) {
   the_divisions <- incarceration_df %>%
     filter(region == p_region) %>%
@@ -37,6 +46,8 @@ divisions_in_region <- function(p_region) {
     pull(division)
   return(the_divisions)
 }
+
+
 
 #----------------------------------------------------------------------------#
 # Return the list of states in a region.  The divisions are: 
@@ -167,4 +178,5 @@ get_basic_info <- function(df) {
 # get_basic_info(incarceration_df)
 # 
 # ## 
-# states_with_no_jail_pop()
+
+ states_with_no_jail_pop()
