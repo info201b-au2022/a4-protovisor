@@ -1,5 +1,5 @@
 ---
-title: "There Is A Serious Problem Within Our Prison System"
+title: "The Lingering Traces of Racism Within Our Prison System"
 author: "Lapi Kerr"
 date: '2022-11-01'
 output: html_document
