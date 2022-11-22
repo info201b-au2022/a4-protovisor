@@ -72,3 +72,12 @@ plot_bm_vs_wm_jail_pop()
 
 The question I wanted to ask with this chart was what exactly the difference was between the national Black male population of prisons when compared to their White counterparts, and it was, upsettingly, a very large margin of difference between the two determinants. While still remaining a lower percentage of the population than white individuals, Black Americans still face an incredible threat of incarceration compared to White Americans. <br />
 You can see that, even from the start of the dataset, more Black Americans were incarcerated than White; this trend doesn't change, hasn't changed, and will not change as long as Black Americans are still marginalized, disenfranchised, and targeted by our penal system. There's a sharp decrease in the Black prison population around 2010 and in both male prison populations around the early 2010's, but the chart still speaks for itself.
+
+## Showing The Rates Of Black American Incarceration Across The Continental U.S.
+```{r blackprisonpopbystate, echo=FALSE}
+state_plot()
+```
+<br /> _Map showing what states have the highest number of incarcerated Black individuals._
+
+From this map, I specifically wanted to know "What states have the highest populations of incarcerated Black individuals?" and I ended up identifying something that I feel is important to understanding the trends within this visualization; while we can understand why California, New York, Texas, Florida and Pennsylvania may have higher populations of incarcerated individuals as a result of higher populations (being the 5 most populous states), I believe that the trend we begin to see after those states are discounted is one that is based in Southern states where racism still hides underneath the veneer of Confederate Flags and voting as red as the states here show up as. <br />
+If you look at the area from Virginia to Georgia to Louisiana, you can see a full area where Black incarceration reaches 100,000 in almost every state. This area directly relates to the areas that separated from the Union in the Civil War, and who culturally even to this day are known for being states that have problems with racism and bigotry.

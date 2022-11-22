@@ -3,7 +3,7 @@ library(tidyverse)
 # The functions might be useful for A4
 source("~/info201/assignments/a4-protovisor/source/a4-helpers.R")
 
-
+options(dplyr.summarise.inform = FALSE)
 
 ## Test queries ----
 #----------------------------------------------------------------------------#
@@ -119,7 +119,7 @@ get_jail_pop_by_states <- function(states) {
     df <- incarceration_df %>%
     filter(state %in% states) %>%
     group_by(state, year) %>%
-    summarise("jail_pop_by_state" = sum(total_jail_pop, na.rm = TRUE))
+    summarize("jail_pop_by_state" = sum(total_jail_pop, na.rm = TRUE))
     return(df)
 }
 
@@ -228,7 +228,7 @@ states <- map_data("state") %>%
   
 
 
-state_plot <- 
+state_plot <- function() { 
   ggplot(states) +
     geom_polygon(
     mapping = aes(x = long, y = lat, group = group, fill = total_black_jail_pop_in_state),
@@ -248,8 +248,9 @@ state_plot <-
     panel.grid.minor = element_blank(),
     panel.border = element_blank()
   )
+}
 
-state_plot
+state_plot()
 
 1## Load data frame ---- 
 
