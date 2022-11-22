@@ -1,5 +1,5 @@
 ---
-title: "Your A4 Report Title (TODO: Revise title)"
+title: "There Is A Serious Problem Within Our Prison System"
 author: "Lapi Kerr"
 date: '2022-11-01'
 output: html_document
@@ -11,35 +11,64 @@ source("../source/analysis.R")
 ```
 
 ## Abstract 
-[TODO: Include a short abstract (about 50 words)]
-
-# Test (TODO: Remove before submission!!)
-```{r echo=FALSE}
-q1_string <- test_query1()
-num <- 5
-```
-As you know, this is a markdown report. The [R Markdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) is **useful!**
-
-* Here's a test of a dynamic variable. Say **"`r q1_string`!!!** 
-* Here's another test. A vector
-of numbers: `r test_query2(num)`.
-
-Recall that _{r echo=TRUE}_ can be used to display the code, 
-which is very useful when developing and debugging a report. Here's an example: 
-
-```{r echo=TRUE}
-num <- 5
-sum <- sum(test_query2(num))
-print(sum)
-```
+This report takes a dataset of incarceration trends from the [Vera Institute](https://www.vera.org/) and identifies the unequal distribution of Black males within multiple contexts of the US Prison System.
 
 ## Introduction 
-[TODO]
+This report aims to present the massive disparities between incarcerated populations within the US prison system. Within the dataset used for this report, a set sourced from the Vera Institute, a list of values relating to specific gender/racial makeup of the US prison system are provided in a very bare-bones data format; as a data feminist, I took the data given and was able to extract not only some massive pointers to an overarching system of inequality within the prison system but was able to plot out some relationships between variables that show this system and other equally impactful problems in full effect.  <br />
+This dataset is for those affected by these systems, the direct stakeholders. Others who can act upon the information within the dataset are data scientists, those who can understand the ideas and act to prevent their continued effects on our society, politicians especially, and anyone who wishes to understand the hard data as to why America isn't truly the "melting pot" it claims to be. The focus of the data is understanding and action on the systems of inequality; with data like this, we can begin to understand and work to fix the problems within the greater systems surrounding things like the prison and ICE systems.  <br />
+The main questions I answer in my report are that of the black male population in our prison system, asking where the highest population of incarcerated black males are as well as comparing the prison population versus white males. The answers to these questions are unfortunately not shocking, but are still undeniably scary regardless.
 
 ## Data Summary 
-[TODO]
+The main values I calculated related to the population of Black males in US prisons. I first wrote a function to determine the total population of every race listed that were incarcerated in individual states, and tested it out on a variety of states; I got, for California (the highest populated state),  <br />
+```{r totalwhitejailpopCA, echo=FALSE}
+highest_incarcerated_race_in_state("CA") %>%
+  pull(total_white_jail_pop_in_state)
+```
+for the population of White incarcerated individuals, whereas I got  <br />
+```{r totalblackjailpopCA, echo=FALSE}
+highest_incarcerated_race_in_state("CA") %>%
+  pull(total_black_jail_pop_in_state)
+```
+for the population of Black incarcerated individuals.  <br />
+This doesn't seem to be a problem; the black population is indeed lower than the white population. However, if we compare this to the overall population of California, we begin to see problems.
+The population of White individuals from 15 to 64 years old in California is <br />
+```{r totalwhitepopCA, echo=FALSE}
+total_race_pop_of_state("CA") %>%
+  pull(white_pop_15to64)
+```
+whereas the population of Black individuals of the same age range is <br />
+```{r totalblackpopCA, echo=FALSE}
+total_race_pop_of_state("CA") %>%
+  pull(black_pop_15to64)
+```
+That's a considerable difference. This single example shows an overarching trend in this report, from coast to coast, of the over-representation of Black Americans in the US prison system. <br />
 
-[TODO ... other sections ... See Canvas for details]
+## Growth of the US Prison Population
+```{r jailpopchartUS, echo=FALSE}
+plot_jail_pop_for_us()
+```
+<br /> _Bar Graph showing the growth of the US Prison Population from 1970 - 2018._
 
-_All the very best with your work!_
+This bar graph shows the growth of the US Prison Population over a period of almost 50 years, from 1970 to 2018. It seems that the prison population stayed stagnant from 1970 to 1980, started rising rapidly until somewhere in the mid 2000's, and slightly dipped at that point and again in the mid 2010's. 
 
+## Growth of Prison Population by State
+```{r jailpopchartstate, echo=FALSE}
+plot_jail_pop_by_states(c("NY", "CA", "FL", "TX"))
+```
+<br /> _Line chart showing the growth of New York, California, Florida and Texas's prison populations from 1970 - 2018._
+
+This line chart shows the growth of the 4 most populated states' prison populations from 1970 to 2018. <br />
+All of the states started out stagnant from 1970 to the late 70's or 1980, and then began rapidly rising in prison population (most likely coinciding with the war on drugs). <br />
+California's rises until 1990, fluctuates for a bit, sharply declines in the early 2010's and rises back to where it was right after. <br />
+Texas' flatlines a bit at 1980, sharply drops in the mid 90's, and continues rising with slight decreases from that point.
+Florida's steadily rose until the late 2000's, where it has been decreasing ever since. <br />
+New York's stopped its ascent in the 90's and, like Florida, has slowly been decreasing ever since.
+
+## Comparing The Black Male Prison Population vs White Male Prison Population, By Year
+```{r bmvswmprisonpop, echo=FALSE}
+plot_bm_vs_wm_jail_pop()
+```
+<br /> _Line chart showing the difference between the prison population of Black male individuals compared to the prison population of White male individuals._
+
+The question I wanted to ask with this chart was what exactly the difference was between the national Black male population of prisons when compared to their White counterparts, and it was, upsettingly, a very large margin of difference between the two determinants. While still remaining a lower percentage of the population than white individuals, Black Americans still face an incredible threat of incarceration compared to White Americans. <br />
+You can see that, even from the start of the dataset, more Black Americans were incarcerated than White; this trend doesn't change, hasn't changed, and will not change as long as Black Americans are still marginalized, disenfranchised, and targeted by our penal system. There's a sharp decrease in the Black prison population around 2010 and in both male prison populations around the early 2010's, but the chart still speaks for itself.

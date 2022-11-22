@@ -25,7 +25,65 @@ test_query2 <- function(num=6) {
 # Data Summary:
 #----------------------------------------------------------------------------#
 
+get_data <- function(num_records=-1) {
+  fname <- "~/info201/data/incarceration_trends.csv"
+  df <- read.csv(fname, nrows=num_records)
+  return(df)
+}
 
+incarceration_df <- get_data(0)
+
+highest_incarcerated_race_in_state <- function(input_state) {
+  df <- incarceration_df %>%
+    select(state, aapi_jail_pop, black_jail_pop, latinx_jail_pop, native_jail_pop, white_jail_pop, other_race_jail_pop) %>%
+    filter(state == input_state) %>%
+    summarize(
+      "total_aapi_jail_pop_in_state" = sum(aapi_jail_pop, na.rm = TRUE),
+      "total_black_jail_pop_in_state" = sum(black_jail_pop, na.rm = TRUE),
+      "total_latinx_jail_pop_in_state" = sum(latinx_jail_pop, na.rm = TRUE),
+      "total_native_jail_pop_in_state" = sum(native_jail_pop, na.rm = TRUE),
+      "total_white_jail_pop_in_state" = sum(white_jail_pop, na.rm = TRUE),
+      "total_other_race_jail_pop_in_state" = sum(other_race_jail_pop, na.rm = TRUE)) %>%
+    return(df)
+}
+
+total_race_pop_of_state <- function(input_state) {
+  df <- incarceration_df %>%
+    select(state, county_name, total_pop, aapi_pop_15to64, black_pop_15to64, latinx_pop_15to64, native_pop_15to64, white_pop_15to64) %>%
+    drop_na() %>%
+    group_by(state, county_name) %>%
+    filter(state == input_state) %>%
+    filter(total_pop == max(total_pop)) %>%
+    filter(aapi_pop_15to64 == max(aapi_pop_15to64)) %>%
+    filter(black_pop_15to64 == max(black_pop_15to64)) %>%
+    filter(latinx_pop_15to64 == max(latinx_pop_15to64)) %>%
+    filter(native_pop_15to64 == max(native_pop_15to64)) %>%
+    filter(white_pop_15to64 == max(white_pop_15to64)) %>%
+    group_by(state) %>%
+    summarize(
+      "aapi_pop_15to64" = sum(aapi_pop_15to64),
+      "black_pop_15to64" = sum(black_pop_15to64),
+      "latinx_pop_15to64" = sum(latinx_pop_15to64),
+      "native_pop_15to64" = sum(native_pop_15to64),
+      "white_pop_15to64" = sum(white_pop_15to64), .groups = 'drop') %>%
+    return(df)  
+}
+
+highest_incarcerated_race_in_states_dataframe <- function() {
+  df <- incarceration_df %>%
+    select(state, aapi_jail_pop, black_jail_pop, latinx_jail_pop, native_jail_pop, white_jail_pop, other_race_jail_pop) %>%
+    group_by(state) %>%
+    summarize(
+      "state" = state,
+      "total_aapi_jail_pop_in_state" = sum(aapi_jail_pop, na.rm = TRUE),
+      "total_black_jail_pop_in_state" = sum(black_jail_pop, na.rm = TRUE),
+      "total_latinx_jail_pop_in_state" = sum(latinx_jail_pop, na.rm = TRUE),
+      "total_native_jail_pop_in_state" = sum(native_jail_pop, na.rm = TRUE),
+      "total_white_jail_pop_in_state" = sum(white_jail_pop, na.rm = TRUE),
+      "total_other_race_jail_pop_in_state" = sum(other_race_jail_pop, na.rm = TRUE)) %>%
+    unique() %>%
+    return(df)
+}
 
 ## Section 3  ---- 
 #----------------------------------------------------------------------------#
@@ -90,8 +148,6 @@ get_bm_vs_wm_jail_pop <- function() {
     return()   
 }
 
-bruh6 <- get_bm_vs_wm_jail_pop()
-
 plot_bm_vs_wm_jail_pop <- function() {
   prison_pop <- get_bm_vs_wm_jail_pop()
   plot <- ggplot(prison_pop, aes(year, y = total_wm_prison_population, color = "White Male Prison Population")) + geom_line(aes(y = total_bm_prison_population, color = "Black Male Prison Population")) + geom_line(aes(y = total_wm_prison_population))
@@ -106,61 +162,13 @@ plot_bm_vs_wm_jail_pop()
 # Showing the rates of Black American incarceration across the United States
 #----------------------------------------------------------------------------#
 
-highest_incarcerated_race_in_state <- function(input_state) {
-  df <- incarceration_df %>%
-    select(state, aapi_jail_pop, black_jail_pop, latinx_jail_pop, native_jail_pop, white_jail_pop, other_race_jail_pop) %>%
-    filter(state == input_state) %>%
-    summarize(
-      "total_aapi_jail_pop_in_state" = sum(aapi_jail_pop, na.rm = TRUE),
-      "total_black_jail_pop_in_state" = sum(black_jail_pop, na.rm = TRUE),
-      "total_latinx_jail_pop_in_state" = sum(latinx_jail_pop, na.rm = TRUE),
-      "total_native_jail_pop_in_state" = sum(native_jail_pop, na.rm = TRUE),
-      "total_white_jail_pop_in_state" = sum(white_jail_pop, na.rm = TRUE),
-      "total_other_race_jail_pop_in_state" = sum(other_race_jail_pop, na.rm = TRUE)) %>%
-    return(df)
-}
 
-total_race_pop_of_state <- function(input_state) {
-  df <- incarceration_df %>%
-    select(state, county_name, total_pop, aapi_pop_15to64, black_pop_15to64, latinx_pop_15to64, native_pop_15to64, white_pop_15to64) %>%
-    drop_na() %>%
-    group_by(state, county_name) %>%
-    filter(state == input_state) %>%
-    filter(total_pop == max(total_pop)) %>%
-    filter(aapi_pop_15to64 == max(aapi_pop_15to64)) %>%
-    filter(black_pop_15to64 == max(black_pop_15to64)) %>%
-    filter(latinx_pop_15to64 == max(latinx_pop_15to64)) %>%
-    filter(native_pop_15to64 == max(native_pop_15to64)) %>%
-    filter(white_pop_15to64 == max(white_pop_15to64)) %>%
-    group_by(state) %>%
-    summarize(
-      "aapi_pop_15to64" = sum(aapi_pop_15to64),
-      "black_pop_15to64" = sum(black_pop_15to64),
-      "latinx_pop_15to64" = sum(latinx_pop_15to64),
-      "native_pop_15to64" = sum(native_pop_15to64),
-      "white_pop_15to64" = sum(white_pop_15to64), .groups = 'drop') %>%
-    return(df)  
-}
-
-highest_incarcerated_race_in_states_dataframe <- function() {
-  df <- incarceration_df %>%
-    select(state, aapi_jail_pop, black_jail_pop, latinx_jail_pop, native_jail_pop, white_jail_pop, other_race_jail_pop) %>%
-    group_by(state) %>%
-    summarize(
-      "state" = state,
-      "total_aapi_jail_pop_in_state" = sum(aapi_jail_pop, na.rm = TRUE),
-      "total_black_jail_pop_in_state" = sum(black_jail_pop, na.rm = TRUE),
-      "total_latinx_jail_pop_in_state" = sum(latinx_jail_pop, na.rm = TRUE),
-      "total_native_jail_pop_in_state" = sum(native_jail_pop, na.rm = TRUE),
-      "total_white_jail_pop_in_state" = sum(white_jail_pop, na.rm = TRUE),
-      "total_other_race_jail_pop_in_state" = sum(other_race_jail_pop, na.rm = TRUE)) %>%
-    unique() %>%
-    return(df)
-}
 
 dataframe_of_states <- 
   highest_incarcerated_race_in_states_dataframe()
-  
+
+#there's probably a better way to do this but this is easier
+
 dataframe_of_states$state_full_names <- c("Alaska", 
                                           "Alabama", 
                                           "Arkansas", 
